@@ -10,20 +10,24 @@ from sklearn.metrics import mean_absolute_error
 from scipy.stats import spearmanr
 
 
-def log(msg):
-    print(f"[INFO] {msg}", flush=True)
-
 
 def load_data(train_path, test_path):
-    """从文件加载已处理好的训练集和测试集"""
+    def read_file(path):
+        if path.endswith('.parquet'):
+            return pd.read_parquet(path)
+        elif path.endswith('.gz'):
+            # 支持 .csv.gz 或 .gz 后缀
+            return pd.read_csv(path, compression='gzip')
+        else:
+            return pd.read_csv(path)
+    
     log(f"读取训练特征: {train_path}")
-    train = pd.read_parquet(train_path) if train_path.endswith('.parquet') else pd.read_csv(train_path)
+    train = read_file(train_path)
     log(f"训练集形状: {train.shape}")
     
     log(f"读取测试特征: {test_path}")
-    test = pd.read_parquet(test_path) if test_path.endswith('.parquet') else pd.read_csv(test_path)
+    test = read_file(test_path)
     log(f"测试集形状: {test.shape}")
-    
     return train, test
 
 
@@ -59,7 +63,6 @@ def preprocess_features(train_data, test_data, ignore_cols):
             unique_cats = all_vals.unique()
             train_data[col] = pd.Categorical(train_data[col].astype(str).fillna('Missing'), categories=unique_cats)
             test_data[col] = pd.Categorical(test_data[col].astype(str).fillna('Missing'), categories=unique_cats)
-    info_print(f"类别特征数: {len(cat_feats)}")
     return train_data, test_data, common_cols, cat_feats
 
 
@@ -80,13 +83,21 @@ def log(msg):
 
 # ------------------------------------------------------------
 def load_data(train_path, test_path):
-    """从文件加载已处理好的训练集和测试集"""
+    def read_file(path):
+        if path.endswith('.parquet'):
+            return pd.read_parquet(path)
+        elif path.endswith('.gz'):
+            # 支持 .csv.gz 或 .gz 后缀
+            return pd.read_csv(path, compression='gzip')
+        else:
+            return pd.read_csv(path)
+    
     log(f"读取训练特征: {train_path}")
-    train = pd.read_parquet(train_path) if train_path.endswith('.parquet') else pd.read_csv(train_path)
+    train = read_file(train_path)
     log(f"训练集形状: {train.shape}")
     
     log(f"读取测试特征: {test_path}")
-    test = pd.read_parquet(test_path) if test_path.endswith('.parquet') else pd.read_csv(test_path)
+    test = read_file(test_path)
     log(f"测试集形状: {test.shape}")
     return train, test
 
@@ -139,8 +150,8 @@ def main():
     args = parser.parse_args()
 
     # 固定输出目录和模型目录（已删除命令行参数）
-    output_dir = './submission'
-    model_dir = './new_model'
+    output_dir = './sub'
+    model_dir = './model_save'
     os.makedirs(output_dir, exist_ok=True)
     os.makedirs(model_dir, exist_ok=True)
 
@@ -201,4 +212,6 @@ def main():
 # ------------------------------------------------------------
 if __name__ == '__main__':
     main()
+
+
 
