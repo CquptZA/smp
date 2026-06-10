@@ -21,4 +21,4 @@ python code.py
 ## Output: Submission file ./sub/sub_v1.csv and trained models in ./model_save/
 
 
-# Remark: Since I just came back from CVPR, I didn't have enough time to organize the feature_engineering.py. I will update it as soon as possible.
+### Remark: Since I just came back from CVPR, I didn't have enough time to organize the feature_engineering.py. I will update it as soon as possible.
