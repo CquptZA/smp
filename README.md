@@ -16,3 +16,5 @@ This script trains a LightGBM model using 5-fold cross-validation on pre-process
 ## Usage
 ```bash
 python code.py
+
+## Output: Submission file ./sub/sub_v1.csv and trained models in ./model_save/
