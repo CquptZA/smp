@@ -180,7 +180,7 @@ def main():
             train.iloc[tr_idx][feats], y[tr_idx],
             eval_set=[(train.iloc[va_idx][feats], y[va_idx])],
             eval_metric='mae',
-            callbacks=[lgb.early_stopping(200, verbose=False)],   # 原参数已删除，固定200轮
+            callbacks=[lgb.early_stopping(200, verbose=False)],  
             categorical_feature=cat_cols if cat_cols else 'auto'
         )
         best_iter = getattr(model, 'best_iteration_', args.lgb_n_estimators)
